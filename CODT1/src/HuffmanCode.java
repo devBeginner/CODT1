@@ -28,6 +28,7 @@ public class HuffmanCode {
     }
 
         
+    
     public void createInfSrcFromText(String strText) {
 
         // neue Liste erzeugen

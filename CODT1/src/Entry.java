@@ -42,6 +42,8 @@ public class Entry implements Comparable<Entry>{
         return value * (-1d*(Math.log(value)/Math.log(2d)));
     }
     
+    
+    
     public Entry( String key, Double value){
         this.key = key;
         this.value = value;
