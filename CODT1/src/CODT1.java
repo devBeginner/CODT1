@@ -33,7 +33,7 @@ public class CODT1 {
      */
     public static void main(String[] args) {
         // Aufgabe 1
-        if (false) {
+        if (true) {
             strTest = strText;
             HuffmanCode huff = new HuffmanCode();
             huff.createInfSrcFromText(strText);
@@ -43,13 +43,13 @@ public class CODT1 {
 
             System.out.println("The String:\n" + strTest + "\nproduces the code:\n" + Helper.convVectorToBinaryString(vecCode));
             System.out.println("\nThe code:\n" + Helper.convVectorToBinaryString(vecCode) + "\nproduces the text:\n" + strDec);
-            System.out.println("\nThe entropy is: " + huff.getEntropy());
-            System.out.println("The average length is: " + huff.getAvgLength());
+            System.out.println("\nThe entropy is:\t" + huff.getEntropy());
+            System.out.println("The avg length is:\t" + huff.getAvgLength());
             System.out.println("\nThe encoding map is:\n" + huff.getEncodeMap());
         }
 
         // AUFGABE 2
-        if (true) {
+        if (false) {
             strTest = "14203214221013124123032000000000000000000";
             strInfSource = "0->0.5;1->0.1;2->0.05;3->0.25;4->0.1";
             HuffmanCode huff = new HuffmanCode();
@@ -60,8 +60,8 @@ public class CODT1 {
             
             System.out.println("The String:\n" + strTest + "\nproduces the code:\n" + Helper.convVectorToBinaryString(vecCode));
             System.out.println("\nThe code:\n" + Helper.convVectorToBinaryString(vecCode) + "\nproduces the text:\n" + strDec);
-            System.out.println("\nThe entropy is: " + huff.getEntropy());
-            System.out.println("The average length is: " + huff.getAvgLength());
+            System.out.println("\nThe entropy is:   \t" + Entry.decForm.format(huff.getEntropy()));
+            System.out.println(  "The avg length is:\t" + Entry.decForm.format(huff.getAvgLength()));
             System.out.println("\nThe encoding map is:\n" + huff.getEncodeMap());
         }
     }

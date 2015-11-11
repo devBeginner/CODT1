@@ -5,6 +5,7 @@
  */
 
 
+import java.text.DecimalFormat;
 import java.util.Vector;
 
 /**
@@ -20,6 +21,8 @@ public class Entry implements Comparable<Entry>{
     public Vector<Boolean> code; //false == linkes child
     public BinaryTree<Entry> node;
     
+    public static DecimalFormat decForm = new DecimalFormat("0.0000");
+    
     
     @Override
     public String toString() {
@@ -31,7 +34,7 @@ public class Entry implements Comparable<Entry>{
         strKey = strKey.replace("\n", "'\\n'");
         strKey = strKey.replace(" ", "' '");
         
-        return "<- " + strKey + "\t(" + String.valueOf(value) + ")\t" + String.valueOf(getEntropy()) + "\t" + String.valueOf(value*code.size()) + "\t--> " + bitlist; //To change body of generated methods, choose Tools | Templates.
+        return "<- " + strKey + "\t% = " + decForm.format(value) + "\t ent = " + decForm.format(getEntropy()) + "\t ig = " + decForm.format(value*code.size()) + "\t code --> " + bitlist; //To change body of generated methods, choose Tools | Templates.
     }
     
     public double getEntropy(){        
