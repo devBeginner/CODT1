@@ -34,7 +34,8 @@ public class Entry implements Comparable<Entry>{
         strKey = strKey.replace("\n", "'\\n'");
         strKey = strKey.replace(" ", "' '");
         
-        return "<- " + strKey + "\t% = " + decForm.format(value) + "\t ent = " + decForm.format(getEntropy()) + "\t ig = " + decForm.format(value*code.size()) + "\t code --> " + bitlist; //To change body of generated methods, choose Tools | Templates.
+        //return "<- " + strKey + "\t% = " + decForm.format(value) + "\t ent = " + decForm.format(getEntropy()) + "\t ig = " + decForm.format(value*code.size()) + "\t code --> " + bitlist; //To change body of generated methods, choose Tools | Templates.
+        return "<- " + strKey + " (" + decForm.format(this.value) + ")";
     }
     
     public double getEntropy(){        

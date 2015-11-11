@@ -117,6 +117,7 @@ public class HuffmanCode {
         for (int i = 0; i < strMsg.length(); i++) {
 
             String chr = String.valueOf(strMsg.charAt(i));
+            
             for (boolean b : encodeMap.get(chr)) {
                 vecMsgCode.add(b);
             }
