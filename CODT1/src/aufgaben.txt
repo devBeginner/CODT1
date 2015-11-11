@@ -1,0 +1,19 @@
+1. Erstellen Sie ein Programm P mit folgenden Anforderungen:
+    (a) Nach Eingabe einer gedächtnislosen Informationsquelle Q = (X, p) soll eine 
+        Huffman-Codierung als Binärbaum generiert werden.
+    (b) Das Programm soll Folgen von Zeichen aus X einlesen und in entsprechende Codewörter 
+        umwandeln und umgekehrt Folgen von Huffman-Codewörtern in Zeichen zurückverwandeln können.
+
+2. Folgender Text soll als binäre Folge codiert werden:
+
+es war einmal eine kleine suesse dirn, die hatte jedermann lieb,
+der sie nur ansah, am allerliebsten aber ihre grossmutter, die
+wusste gar nicht, was sie alles dem kind geben sollte. einmal
+schenkte sie ihm ein kaeppchen von rothem sammet, und
+weil ihm das so wohl stand, und es nichts anders mehr tragen
+wollte, hiess es nur das rohtkaeppchen.
+
+    (a) Modellieren Sie für den Text eine geeignete Informationsquelle Q = (X, p) und berechnen Sie die Entropie der Informationsquelle.
+    (b) Erstellen Sie für die Informationsquelle Q mittels P eine Huffman-Codierung und codieren Sie den angegebenen Text. 
+        Bestimmen Sie die durchschnittliche Codierlänge pro Zeichen und vergleichen Sie den Wert mit der Entropie der Informationsquelle.
+    (c) Decodieren Sie die in (b) erstellte Bitfolge zurück in den Text.
