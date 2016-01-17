@@ -14,8 +14,9 @@ import java.util.Vector;
  */
 public class CODT1 {
 
+    // Testausgabe ein oder abschalten
     public static final boolean bTestOutput = false;
-
+    
     private static final String strText
             = "es war einmal eine kleine suesse dirn, die hatte jedermann lieb,\n"
             + "der sie nur ansah, am allerliebsten aber ihre grossmutter, die\n"
@@ -25,7 +26,6 @@ public class CODT1 {
             + "wollte, hiess es nur das rohtkaeppchen.";
 
     private static String strTest;
-
     private static String strInfSource;
 
     /**
@@ -40,8 +40,8 @@ public class CODT1 {
 
             Vector<Boolean> vecCode = huff.encodeString(strTest);
             String strDec = huff.decodeBitVector(vecCode);
-
-            System.out.println("The String:\n" + strTest + "\nproduces the code:\n" + Helper.convVectorToBinaryString(vecCode));
+            String strCode =  Helper.convVectorToBinaryString(vecCode);
+            System.out.println("The String:\n" + strTest + "\nproduces the code(" + strCode.length() + " bits):\n" + strCode);
             System.out.println("\nThe code:\n" + Helper.convVectorToBinaryString(vecCode) + "\nproduces the text:\n" + strDec);
             System.out.println("\nThe entropy is:\t" + huff.getEntropy());
             System.out.println("The avg length is:\t" + huff.getAvgLength());

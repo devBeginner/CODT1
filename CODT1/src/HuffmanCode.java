@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,9 +15,17 @@ import java.util.Vector;
  */
 public class HuffmanCode {
 
+    // Hashmap fuer das Codieren von Zeichen. Sie enthaelt saemtliche Zeichen und die 
+    // dazugehoerigen Bitvektoren
     private HashMap<String, Vector<Boolean>> encodeMap;
+
+    // Liste fuer das Zwischenspeichern der Knoten und um die Knoten der Grossen nach zu sortieren
     private ArrayList<Entry> entries;
+
+    // Die Liste enthaelt alle Eintraege fuer die Zeichen
     private ArrayList<BinaryTree<Entry>> nodes;
+
+    // Zeiger auf den Root Knoten des erstellten Huffman Baumes
     private BinaryTree<Entry> treeRoot;
 
     {
@@ -27,39 +34,50 @@ public class HuffmanCode {
         nodes = new ArrayList<>();
     }
 
-        
-    
+    /*
+    *   Erstellt die Informationsquelle 
+     */
     public void createInfSrcFromText(String strText) {
 
         // neue Liste erzeugen
         entries = new ArrayList<>();
+
+        // fuer das einlesen der Zeichen wird eine Hasmap verwendet
         HashMap<Character, Entry> chars = new HashMap<>();
 
         // alle Zeichen des Übergebenen Textes durchlaufen und haefigkeit des Vorkommens ermitteln
         for (int i = 0; i < strText.length(); i++) {
-            // Zeichen ermitteln
+
+            // aktuelles Zeichen ermitteln
             char chrCurr = strText.charAt(i);
 
-            // Wenn das Zeichen einen Eintrag in der Map hat
+            // Wenn das Zeichen einen Eintrag in der Hashmap Map hat
             if (chars.containsKey(chrCurr)) {
-                
-                // Den Wert laden, erhöhen und zurückspeichern
+
+                // Den Eintrag ermitteln und dann die Haeufigkeit erhoehen
                 chars.get(chrCurr).count++;
-                
-            } else {
+
+            } else { // Wenn das Zeichen noch nicht in der Hashmap enthalten ist
+
+                // neuen Eintrag erstellen fuer das Zeichen
                 Entry e = new Entry(String.valueOf(chrCurr), 0d);
                 e.count = 1;
-                // Eintrag erstellen
+
+                // Eintrag fuer das Zeichen in der Hashmap erstellen und dann 
+                // den Eintrag zur Liste mit saemtlichen Eintraegen hinzufuegen
                 chars.put(chrCurr, e);
                 entries.add(e);
             }
         }
-        // Wahrscheinlichkeiten berechnen
-        for ( Entry e : entries){
-            e.value = (double)e.count / (double)strText.length();
+
+        // Wahrscheinlichkeiten fuer die einzelnen Zeichen berechnen
+        // dafuer alle Eintraege durhlaufen und mithilfe der Vorkommen die 
+        // Wahrscheinlichkeit berechnen
+        for (Entry e : entries) {
+            e.value = (double) e.count / (double) strText.length();
         }
 
-        // Liste der Eintraege sortieren
+        // Liste der Eintraege anhand der Wahrscheinlichkeit sortieren
         Collections.sort(entries);
 
         // Huffmancode erstellen
@@ -73,75 +91,89 @@ public class HuffmanCode {
         }
 
     }
-    
-    public String getEncodeMap(){
-        
+
+    // Eine Uebersicht ueber alle Eintraege erstellen
+    public String getEncodeMap() {
+
         String strRet = "";
-        
-        for ( Entry e : entries ){
+
+        for (Entry e : entries) {
             strRet += e.toString() + "\n";
         }
-        
+
         return strRet;
     }
 
+    // Einen uebergebenen Bitvektor mithilfe des Huffmanbaums
+    // dekodieren und den resultierendem String zurueck geben.
     public String decodeBitVector(Vector<Boolean> vecCode) {
 
         String strRet = "";
-        BinaryTree<Entry> node = treeRoot;
+        BinaryTree<Entry> node = treeRoot;  // Zeiger fuer das Durchlaufen des Huffmanbaumes auf die Wurzel setzen
 
+        // Alle Bits des uebergebenen Binaervektors durchlaufen und den Huffmanbaum damit durchlaufen
         for (boolean b : vecCode) {
-            
-            // Wenn das bit 0 ist, nach links gehen, sonst nach rechts
+
+            // Wenn das bit 0 ist, zum linken Kindknoten wechseln 
+            // wenn das Bit 1 ist, zum rechten Kindknoten wechseln
             if (b == false) {
                 node = node.getLeft();
             } else {
                 node = node.getRight();
             }
-            
-            // wenn ein Blatt erreicht wurde, den Key zur rueckgabe hinzufügen 
+
+            // wenn ein Blatt erreicht wurde, also keine weiteren Kinder darunter existieren,
+            // den Key zur rueckgabe hinzufügen 
             // und dann den Knotenzeiger wieder auf die Wurzel setzen
             if (node.isLeaf()) {
                 strRet += node.getValue().key;
                 node = treeRoot;
-            } 
+            }
         }
 
         return strRet;
     }
 
     // encoded den übergebenen String
+    // Wandelt den uebergebenen String mithilfe der Hashmap in einen Binaervektor um
     public Vector<Boolean> encodeString(String strMsg) {
 
+        // Rueckgabevektor
         Vector<Boolean> vecMsgCode = new Vector<>();
 
+        // Alle Zeichen des Strings durchlaufen
         for (int i = 0; i < strMsg.length(); i++) {
 
+            // aktuelles Zeichen ermittlen
             String chr = String.valueOf(strMsg.charAt(i));
-            
+
+            // Aus der Hashmap den zugehoerigen Binaervektor fuer das Zeichen ermitteln
+            // und zur Rueckgabe hinzufuegen
             for (boolean b : encodeMap.get(chr)) {
                 vecMsgCode.add(b);
             }
-
         }
-
         return vecMsgCode;
-
     }
 
+    /* Interpretiert einen uebergebenen String als Char -> Wahrscheinlichkeit
+    * 
+     */
     public void parseInfSourceFromInput(String strInput) {
 
         // Map für die einzelnen Chars
         entries = new ArrayList<>();
         HashMap<String, Double> mapInfSource = new HashMap<>();
 
-        // Alle Eintraege durchlaufen
+        // Alle Eintraege durchlaufen und parsen, getrennt wird an einem ;
         for (String strEntry : strInput.split(";")) {
 
             // Key und Value ermitteln
             String strKey = strEntry.split("->")[0];
             double dblVal = Double.valueOf(strEntry.split("->")[1]);
 
+            // Wenn der Key noch nicht eingefuegt wurde und key und value 
+            // gueltige Werte besitzen
             if (mapInfSource.get(strKey) == null && !strKey.equals("") && dblVal > 0) {
 
                 // Eintrag zur Map hinzufuegen
@@ -151,11 +183,12 @@ public class HuffmanCode {
             }
         }
 
-        // sortieren nahc Wahrscheinlichkeit
+        // sortieren nach Wahrscheinlichkeit
         Collections.sort(entries);
-        
+
+        // Huffmancode erstellen aus den gefundenen Eintraegen
         generateHuffmanCode();
-        
+
         //TESTAUSGABE
         if (CODT1.bTestOutput) {
             for (Entry key : entries) {
@@ -164,6 +197,7 @@ public class HuffmanCode {
         }
     }
 
+    // Entropie fuer alle Zeichen ermitteln und zurueck geben
     public double getEntropy() {
 
         double dblRet = 0;
@@ -174,51 +208,72 @@ public class HuffmanCode {
 
         return dblRet;
     }
-    
-    public double getAvgLength(){
+
+    // Durchschnittliche Laenge der Eintrage berechnen
+    public double getAvgLength() {
         double dblRet = 0;
 
+        // Alle Eintraege durchlaufen und die Wahrscheinlichkeiten mit der Laenge
+        // des jeweilige Binaervektors multiplizieren
         for (Entry e : entries) {
             dblRet += e.value * e.code.size();
         }
 
         return dblRet;
     }
-    
+
+    /*
+    * Erstellung des Huffmancodes
+     */
     private void generateHuffmanCode() {
 
-        // KnotenListe erstellen
+        // KnotenListe fuer das Zwischenspeichern der Elemente bei der Erstellung des Huffmancodes
         ArrayList<Entry> copy = new ArrayList<>();
 
+        // Hashmap fuer fuer die Knoten anlegen 
         HashMap<String, BinaryTree<Entry>> treeMap = new HashMap<>();
 
-        // Knoten für alle Einträge erstellen und kopieren
+        // Einträge durchlaufen
         for (Entry e : entries) {
+
+            // Neuen Knoten fuer den Binaerbaum erstellen und den Zeiger im 
+            // Element hinzufuegen
             e.node = new BinaryTree<>(e);
 
+            // Den erstellten Knoten mit dem Key in die Hashmap einfuegen
             treeMap.put(e.key, e.node);
 
+            // Dummyeintrag aus dem aktuellen erstellen, der nur fuer die Erstellung
+            // des Baumes verwendet wird
             Entry cpy = new Entry(e.key, e.value);
             cpy.node = e.node;
             copy.add(cpy);
         }
 
-        // Solange neue Bäume erstellen, bis nur nochh zwei übrig sind 
+        // Die Schleife arbeitet alle erstellten Knoten ab und verknuepft immer diejenigen 
+        // mit der niedrigsten Wahrscheinlichkeit zu einem neuen Knoten, bis nur noch ein Knoten 
+        // uebrig ist. Der Huffmanbaum wird von unten nach oben aufgebaut
         while (copy.size() > 1) {
 
-            // Baum erstellen mit summierten werten und dafür einen Entry erstellen
+            // Neuen Knoten und neues Element erstellen, dass die addierte Wahrscheinlichkeit besitzt
             treeRoot = new BinaryTree<>(
                     new Entry(copy.get(0).key + copy.get(1).key, copy.get(0).value + copy.get(1).value));
+
+            // als Linkes Kind des neu erstellten Knotens wird der Eintrag mit der niedrigsten Wahrscheinlichkeit
+            // das zweit niedrigste Element ist dann das rechte Kind
             treeRoot.setLeft(treeMap.get(copy.get(0).key));
             treeRoot.setRight(treeMap.get(copy.get(1).key));
+
+            // Den verknuepften Knoten zur Knotenliste hinzufuegen
             treeMap.put(copy.get(0).key + copy.get(1).key, treeRoot);
 
-            // Die beiden entries aus der kopie löschen und den summierten entry hinzufuegen
+            // Die beiden Eintraege fuer die Verknüpfung aus der temporaeren Liste
+            // entfernen. Dann den Eintrag des verknüpften Knotens hinzufuegen
             copy.remove(1);
             copy.remove(0);
             copy.add(treeRoot.getValue());
 
-            // entraege neu sortieren
+            // Nach der Wahrscheinlichkeit sortieren
             Collections.sort(copy);
 
         }
@@ -228,8 +283,9 @@ public class HuffmanCode {
         generateEncodingMap(treeRoot);
 
         //TESTAUSGABE
-        System.out.println(treeRoot.toString());
-
+        if (CODT1.bTestOutput) {
+            System.out.println(treeRoot.toString());
+        }
     }
 
     // Funktion, die rekursiv alle Knoten durchläuft und die Keys und zugehörifgen
@@ -265,7 +321,10 @@ public class HuffmanCode {
 
                 // In allen Blattknoten unterhalb des linken Blattes ein false (0) hinzufügen
                 // Sodass deren erstes Bit eine 0 enthält
-                calculateCode(root.getLeft(), false);
+                for (boolean b : root.getValue().code) {
+                    root.getLeft().getValue().code.add(b);
+                }
+                root.getLeft().getValue().code.add(false);
 
                 // Dann diese funktion für das Linke Blatt aufrufen
                 calculateCode(root.getLeft());
@@ -273,7 +332,11 @@ public class HuffmanCode {
 
             // Analog zum linken Blatt, falls ein rechter Knoten existiert
             if (root.hasRight()) {
-                calculateCode(root.getRight(), true);
+                for (boolean b : root.getValue().code) {
+                    root.getRight().getValue().code.add(b);
+                }
+                root.getRight().getValue().code.add(true);
+
                 calculateCode(root.getRight());
             }
         }
@@ -300,4 +363,5 @@ public class HuffmanCode {
             root.getValue().code.add(bAddBit);
         }
     }
+
 }
